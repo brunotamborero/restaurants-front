@@ -1,4 +1,4 @@
-# restaurants
+# vue-api
 
 ## Project setup
 ```
