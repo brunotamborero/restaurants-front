@@ -1,22 +1,22 @@
 <template>
   <div class="row">
     <div class="col m12 card-panel">
-      <form @submit.prevent="iniciarSesion">
+      <form @submit.prevent="Login">
         <div class="row">
           <div class="col m3">
-            <label>Usuario</label>
+            <label>Email</label>
             <input type="text" v-model="user">
           </div>
         </div>
         <div class="row">
           <div class="col m3">
-            <label>Contraseña</label>
+            <label>Password</label>
             <input type="password" v-model="password">
           </div>
         </div>
         <div class="row">
           <div class="col m3">
-            <button v-show="!loading" type="submit" class="btn">INICIAR SESION<i class="material-icons right">security</i></button>
+            <button vtype="submit" class="btn">LOGIN</button>
             <div v-show="loading" class="progress">
               <div class="indeterminate"></div>
           </div>
@@ -29,6 +29,8 @@
 
 
 <script>
+    import router from "@/router";
+
     export default
     {
         name: 'Login',
@@ -40,7 +42,7 @@
           }
         },
         methods: {
-          async iniciarSesion()
+          async Login()
           {
             var qs = require('qs');
             var data = qs.stringify({
@@ -63,12 +65,17 @@
                   console.log(JSON.stringify(response.data.access_token));
                   localStorage.setItem('token', response.data.access_token);
                   console.log(localStorage.token);
-                  this.$router.push({name: "Estudiantes"});
                   })
                 .catch(function (error) {
                   console.log(error);
 
                 });
+            this.axios.get('http://127.0.0.1:8000/users/me/').then(response => {
+              console.log(JSON.stringify(response.data));
+              localStorage.setItem('userName', response.data.email);
+              localStorage.setItem('id', response.data.id);
+              router.push('/')
+            });
             this.loading = false;
 
 

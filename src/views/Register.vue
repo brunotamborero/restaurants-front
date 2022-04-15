@@ -29,7 +29,7 @@
 
         <div class="row">
           <div class="col m3">
-            <button v-show="!loading" type="submit" class="btn">CREATE USER<i class="material-icons right">security</i></button>
+            <button v-show="!loading" type="submit" class="btn">CREATE USER<</button>
             <div v-show="loading" class="progress">
               <div class="indeterminate"></div>
           </div>
@@ -42,6 +42,8 @@
 
 
 <script>
+    import router from "@/router";
+
     export default
     {
         name: 'Register',
@@ -77,6 +79,8 @@
             this.axios(config)
                 .then(function (response) {
                   console.log(JSON.stringify(response.data));
+                  router.push('/login')
+
                 })
                 .catch(function (error) {
                   console.log(error);

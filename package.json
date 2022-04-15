@@ -13,6 +13,7 @@
     "materialize-css": "^1.0.0",
     "vue": "^3.0.0",
     "vue-axios": "^3.2.4",
+    "vue-basic-alert": "^1.1.0",
     "vue-material-design-icons": "^5.0.0",
     "vue-router": "^4.0.5"
   },

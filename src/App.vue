@@ -1,10 +1,13 @@
 <template>
   <nav>
-    <div class="nav-wrapper teal">
+    <div class="nav-wrapper">
       <ul class="right hide-on-med-and-down">
-        <li><router-link to="/Estudiantes">Estudiantes</router-link></li>
         <li><router-link to="/Register">Register</router-link></li>
-        <li><router-link to="/Order">Order</router-link></li>
+        <li><router-link to="/Restaurant">Restaurant</router-link></li>
+        <li><router-link to="/MakeOrder">MakeOrder</router-link></li>
+
+        <li><router-link to="/User">User</router-link></li>
+
         <li><router-link :to="{name: 'Login'}">Login</router-link></li>
       </ul>
     </div>
