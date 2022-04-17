@@ -28,7 +28,7 @@
     </tbody>
   </table>
   <h4>Quantity:</h4>
-  <input v-model="quantity" type="int">
+  <input v-model="quantity" type="int" :min="1">
   <div class="row">
     <div class="col m12 card-panel">
       <form @submit.prevent="CreateOrder">
@@ -44,13 +44,14 @@
 
 
 <script>
-    import router from "@/router";
+import router from "@/router";
 
     export default
     {
 
       async mounted()
       {
+
         await this.axios.get('http://127.0.0.1:8000/order/'+ this.$route.params.id)
             .then(response => {
               console.log(JSON.stringify(response.data));
@@ -65,11 +66,10 @@
 
       name: 'AddDishes',
         data(){
-          console.log(this.$route.params.id)
           return {
             dishes: [],
             dishes_order: [],
-
+            orderid: '',
             order: [],
             name: '',
             price: '',
@@ -85,10 +85,13 @@
 
         methods: {
           async handleClick(id, quantity, dishes_order) {
+            console.log(quantity)
+            if (quantity < 1) quantity = 1
             var data = JSON.stringify({
               "detail_id_dish": id,
               "quantity": quantity,
             });
+            console.log(data),
             dishes_order.push(data)
 
           },
@@ -97,10 +100,11 @@
             var datalist = JSON.stringify({
             dishes: this.dishes_order
           });
-            var newStr = datalist.replace(/"{/, "{");
-            newStr = newStr.replace(/}"/, "}");
-            newStr = newStr.replace(/\\/gi, '')
-            console.log(newStr);
+            var newStr = datalist.replaceAll(/"{/g, "{");
+            newStr = newStr.replaceAll(/}"/g, "}");
+            newStr = newStr.replaceAll(/\\/gi, '');
+
+            console.log(newStr)
 
             var config = {
               method: 'put',
@@ -113,7 +117,7 @@
             this.axios(config)
                 .then(function (response) {
                   console.log(JSON.stringify(response.data));
-                  router.go();
+                  router.push('/order/' + response.data.id + '/')
                 })
                 .catch(function (error) {
                   console.log(error);
