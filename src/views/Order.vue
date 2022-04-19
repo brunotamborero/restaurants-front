@@ -1,143 +1,118 @@
 <template>
-  <div class="row">
-    <div class="col m12 card-panel">
-      <form @submit.prevent="AddDish">
-        <div class="row">
-          <div class="col m3">
-            <label>Name</label>
-            <input type="text" v-model="name">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col m3">
-            <label>Price</label>
-            <input type="int" v-model="price">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col m3">
-            <label>description</label>
-            <input type="text" v-model="description">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col m3">
-            <label>Suitable Diet</label>
-            <select v-model="suitableDiet">
-              <option value="Shelfish Free">Shelfish Free</option>
-              <option value="Gluten Free">Gluten Free</option>
-              <option value="Vegetarian"> Vegetarian</option>
-            </select>
-          </div>
-        </div>
+  <h2>Order</h2>
+  <strong>ID: {{order.id}}</strong>
+  <div></div>
+  <strong>Table: {{order.table_id}}</strong>
+  <div></div>
 
-        <div class="row">
-          <div class="col m3">
-            <button v-show="!loading" type="submit" class="btn">ADD DISH</button>
-            <div v-show="loading" class="progress">
-              <div class="indeterminate"></div>
-          </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+  <h5>TOTAL: {{order.total_amount}}</h5>
+  <div></div>
 
   <h2>DISHES:</h2>
   <table>
     <thead>
+    <td>QUANTITY</td>
     <td>NAME</td>
     <td>PRICE</td>
-    <td>DESCRIPTION</td>
-    <td>SUITABLEDIET</td>
 
 
 
     </thead>
     <tbody>
     <tr v-if="loading">LOADING MORE...</tr>
-    <tr v-for="dishes in dishes" :key="dishes.name">
-      <td>{{ dishes.name }}</td>
-      <td>{{ dishes.price }}</td>
-      <td>{{ dishes.description }}</td>
-      <td>{{ dishes.suitableDiet }}</td>
+    <tr v-for="dishes in dishes" :key="dishes.id">
+      <td>{{ dishes.quantity }}</td>
+      <td>{{ dishes.name_dish }}</td>
+      <td>{{ dishes.price_dish }}</td>
 
 
     </tr>
     </tbody>
   </table>
+  <button class=button>  <router-link :to="'/CreateOrderDishes/' + order.id" >Add Dishes</router-link>
+  </button>
+
 </template>
 
 
 <script>
-    import router from "@/router";
-    import M from 'materialize-css'
 
+export default
+{
+  async mounted()
+  {
+    await this.axios.get('order/' + this.$route.params.id)
+        .then(response => {
+          console.log(JSON.stringify(response.data));
+          this.order = response.data;
+          this.dishes = response.data.details;
 
-    export default
-    {
-      async mounted()
-      {
-        console.log("EJECUTADO");
-        var elems = document.querySelectorAll('select');
-        this.select_instances = M.FormSelect.init(elems, null);
-        await this.axios.get('dishes/' + this.$route.params.id)
-            .then(response => {
-              console.log(JSON.stringify(response.data));
-              this.dishes = response.data;
-            });
-      },
+          console.log(this.order)
+        });
+  },
 
-      name: 'AddDishes',
-        data(){
-          console.log(this.$route.params.id)
-          return {
-            dishes: [],
-            name: '',
-            price: '',
-            description: '',
-            suitableDiet: '',
-            loading: false,
-            select_instances:[]
-          }
+  name: 'AddDishes',
+  data(){
+    console.log(this.$route.params.id)
+    return {
+      order: '',
+      dishes: '',
+      loading: false,
 
-        },
-
-
-        methods: {
-          async AddDish()
-          {
-            var data = JSON.stringify({
-              "name": this.name,
-              "price": this.price,
-              "description": this.description,
-              "suitableDiet": this.suitableDiet,
-            });
-
-            console.log(data);
-            var config = {
-              method: 'post',
-              url: 'http://127.0.0.1:8000/restaurant/' + this.$route.params.id + '/dishes',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              data : data
-            };
-            this.loading = true;
-            this.axios(config)
-                .then(function (response) {
-                  console.log(JSON.stringify(response.data));
-                  router.go();
-                })
-                .catch(function (error) {
-                  console.log(error);
-                });
-
-            this.loading = false;
-
-
-
-          }
-        }
     }
+
+  },
+
+
+  methods: {
+    async AddDish()
+    {
+      var data = JSON.stringify({
+        "name": this.name,
+        "price": this.price,
+        "description": this.description,
+        "suitableDiet": this.suitableDiet,
+      });
+
+      console.log(data);
+      var config = {
+        method: 'post',
+        url: 'http://127.0.0.1:8000/restaurant/' + this.$route.params.id + '/dishes',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+      this.loading = true;
+      this.axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+      this.loading = false;
+
+
+
+    }
+  }
+}
 </script>
+
+
+<style>
+
+.button {
+  background-color: #64ff01;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+</style>

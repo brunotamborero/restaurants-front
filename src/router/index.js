@@ -11,6 +11,8 @@ import Order from '@/views/Order.vue'
 import MakeOrder from '@/views/MakeOrder.vue'
 import MakeOrderDishes from '@/views/MakeOrderDishes.vue'
 import Profile from '@/views/Profile.vue'
+import CreateOrder from "@/views/CreateOrder";
+import Pay from "@/views/Pay";
 
 const routes = [
     {
@@ -27,6 +29,21 @@ const routes = [
         path: '/User',
         name: 'User',
         component: Profile
+    },
+    {
+        path: '/createorder/:idrestaurant/:idtable',
+        name: 'Createorder',
+        component: CreateOrder
+    },
+    {
+        path: '/order/:idorder/pay',
+        name: 'Pay',
+        component: Pay
+    },
+    {
+        path: '/CreateOrderDishes/:id',
+        name: 'CreateOrderDishes',
+        component: MakeOrderDishes
     },
     {
         path: '/Register',

@@ -31,22 +31,22 @@
 
 
 <script>
-    export default{
-        async mounted()
-        {
-          var id = localStorage.getItem('id');
+export default{
+  async mounted()
+  {
+    var id = localStorage.getItem('id');
 
-          console.log(id);
-            await this.axios.get('restaurants/me')
-            .then(response => {
-              console.log(JSON.stringify(response.data));
-              this.restaurants = response.data;
-            });
-        },
-        data(){
-            return {
-              restaurants: []
-            }
-        }
+    console.log(id);
+    await this.axios.get('restaurants/me')
+        .then(response => {
+          console.log(JSON.stringify(response.data));
+          this.restaurants = response.data;
+        });
+  },
+  data(){
+    return {
+      restaurants: []
     }
+  }
+}
 </script>
